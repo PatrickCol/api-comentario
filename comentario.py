@@ -8,6 +8,7 @@ def lambda_handler(event, context):
     tenant_id = event['body']['tenant_id']
     texto = event['body']['texto']
     nombre_tabla = os.environ["TABLE_NAME"]
+    bucket_name = os.environ["S3_BUCKET_NAME"]
     
     # Proceso
     uuidv1 = str(uuid.uuid1())
@@ -24,7 +25,6 @@ def lambda_handler(event, context):
 
     # Tambien vamos a guardar el comentario en un bucket de S3
     s3 = boto3.client('s3')
-    bucket_name = os.environ["S3_BUCKET_NAME"]
     S3_response = s3.put_object(
         Bucket=bucket_name,
         Key=f'comentarios/{tenant_id}/{uuidv1}.json',
