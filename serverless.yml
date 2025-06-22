@@ -11,6 +11,7 @@ provider:
     role: arn:aws:iam::861285213990:role/LabRole	
   environment:
     TABLE_NAME: ${sls:stage}-t_comentarios
+    S3_BUCKET_NAME: ${sls:stage}-patrickco-bucket-comentarios
 
 functions:
   crear:
@@ -24,6 +25,16 @@ functions:
 
 resources:
   Resources:
+    BucketComentarios:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.S3_BUCKET_NAME}
+        AccsessControl: PublicRead
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          IgnorePublicAcls: false
+          BlockPublicPolicy: false
+          RestrictPublicBuckets: false  
     TablaComentarios:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -40,3 +51,4 @@ resources:
             KeyType: RANGE
         # Set the capacity to auto-scale
         BillingMode: PAY_PER_REQUEST
+
